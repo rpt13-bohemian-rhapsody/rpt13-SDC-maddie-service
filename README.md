@@ -10,7 +10,7 @@ From the root of the service folder, run `npm start`.
 
 ### POSTGRES DATABASE
 
-##### Make sure postgres is installed on your computer
+#### Make sure postgres is installed on your computer
 https://www.postgresql.org/download/macosx/
 
 ```console
@@ -18,7 +18,7 @@ node -v postgressql
 brew info postgres
 ```
 
-##### Postgres setup
+#### Postgres setup
 
 **Start Postgres**
 - run SQL Shell (psql).app, from the psql postgres prompt
@@ -43,25 +43,13 @@ node database/createDatabase.js
 `\dt` - tables in the schema
 
 Structure
-- Databases
-  |- Database
-    |- Schemas
-      |- Schema
-        |- Tables
-          |- Table
+- Databases <br>
+  |- Database <br>
+    |- Schemas <br>
+      |- Schema <br>
+        |- Tables <br>
+          |- Table <br>
 
-### MongoDB Schema
-
-```
-let productInfoSchema = mongoose.Schema({
-  id: { type: Number, required: true, unique: true },
-  title: String,
-  description: String,
-  product_price: Number,
-  seller: String,
-  colors: Array,
-});
-```
 
 ### Seeding Script
 
