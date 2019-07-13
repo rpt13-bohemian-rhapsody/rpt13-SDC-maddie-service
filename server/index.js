@@ -10,9 +10,9 @@ const port = process.env.PORT || 8080;
 
 app.use(cors());
 
-app.use(express.static(path.join(__dirname, '/client/dist')));
+app.use(express.static(path.join(__dirname, '/../client/dist')));
 
-app.use('/products/:id', express.static(path.join(__dirname, '/client/dist')));
+app.use('/products/:id', express.static(path.join(__dirname, '/../client/dist')));
 
 app.get('/product/:id', (req, res) => {
   console.log("/product/:id");

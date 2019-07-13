@@ -10,9 +10,9 @@ export const Link = ({ id, name }) => (
 
 const AllProductsLinkGenerator = ({ allProducts }) =>
   allProducts.length > 1 ? (
-    allProducts.map(({ id, title }) => <Link key={id} id={id} name={title} />)
+    allProducts.map(({ id, title }) => <Link key={'link-' + id} id={id} name={title} />)
   ) : (
-      <CircularProgress style={{ margin: '10% 50%' }} color="rgb(35, 47, 62)" />
+      <CircularProgress style={{ margin: '10% 50%' }} color="primary" key={'cp-' + id} />
     );
 
 export default AllProductsLinkGenerator;

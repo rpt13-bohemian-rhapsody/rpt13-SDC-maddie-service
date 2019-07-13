@@ -14,7 +14,6 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    console.log('componentDidMount for ' + window.location.pathname);
     if (window.location.pathname !== '/') {
       $.ajax({
         type: 'GET',
@@ -58,7 +57,7 @@ class App extends React.Component {
     return (
       <Wrapper>
         {window.location.pathname !== '/' ? (
-          <Product currentProduct={this.state.currentProduct} />
+          <Product key={'product-' + this.state.currentProduct.id} currentProduct={this.state.currentProduct} />
         ) : (
             <AllProductsLinkGenerator allProducts={this.state.allProducts} />
           )}

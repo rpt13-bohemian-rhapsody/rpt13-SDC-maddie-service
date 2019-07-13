@@ -12,23 +12,23 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 const Colors = ({ children, updateCurrentColor, currentColor }) =>
   children
     ? React.Children.map(children, (item) =>
-        item ? (
-          <Color
-            itemColor={item}
-            currentColor={currentColor}
-            onClick={() => updateCurrentColor(item)}
-          >
-            <div
-              style={{
-                backgroundColor: `${item}`,
-                width: '100%',
-                height: '100%',
-                borderRadius: '15px',
-              }}
-            />
-          </Color>
-        ) : null
-      )
+      item ? (
+        <Color
+          itemColor={item}
+          currentColor={currentColor}
+          onClick={() => updateCurrentColor(item)}
+        >
+          <div
+            style={{
+              backgroundColor: `${item}`,
+              width: '100%',
+              height: '100%',
+              borderRadius: '15px',
+            }}
+          />
+        </Color>
+      ) : null
+    )
     : null;
 
 const loadingMessage = 'Loading...';
@@ -51,7 +51,6 @@ class Product extends React.Component {
   }
 
   componentDidMount() {
-    console.log('Products - componentDidMount for ' + this.props.currentProduct);
     // TODO: Fix this.props.currentProduct.id is undefined
     this.setState((state) => ({
       currentColor: '',
@@ -97,19 +96,19 @@ class Product extends React.Component {
             <Description>
               <ul style={{ listStylePosition: 'inside', paddingLeft: '0px' }}>
                 {description ? (
-                  description.split('\n').map((item) => <li>{item}</li>)
+                  description.split('\n').map((item) => <li key={'' + item.replace(/\W/g, '')}>{item}</li>)
                 ) : (
-                  <h3>{loadingMessage}</h3>
-                )}
+                    <h3>{loadingMessage}</h3>
+                  )}
               </ul>
             </Description>
           </>
         ) : (
-          <CircularProgress
-            style={{ margin: '10% 50%' }}
-            color="rgb(35, 47, 62)"
-          />
-        )}
+            <CircularProgress
+              style={{ margin: '10% 50%' }}
+              color="primary"
+            />
+          )}
       </div>
     );
   }
