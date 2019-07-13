@@ -1,9 +1,7 @@
-const mongoose = require('mongoose');
+const {PGDatabase} = require('pg');
+const dbInst = new PGDatabase();
 
-mongoose.connect(
-  'mongodb+srv://fec-bruce-service:randompassword@fec-bruce-service-1r15o.mongodb.net/test?retryWrites=true',
-  { useNewUrlParser: true }
-);
+await dbInst.connect();
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
