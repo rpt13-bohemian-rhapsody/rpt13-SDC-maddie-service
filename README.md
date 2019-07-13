@@ -10,30 +10,45 @@ From the root of the service folder, run `npm start`.
 
 ### POSTGRES DATABASE
 
-- Make sure postgres is installed on your computer
+##### Make sure postgres is installed on your computer
 https://www.postgresql.org/download/macosx/
 
-```
+```console
 node -v postgressql
 brew info postgres
 ```
 
-- start postgres
+##### Postgres setup
 
-- pgtools will be installed with npm package
+**Start Postgres**
+- run SQL Shell (psql).app, from the psql postgres prompt
 
-- command prompt
-```
+**Create database**
+```console
 node database/createDatabase.js
 ```
 
-- run SQL Shell (psql).app, from the psql postgres prompt
-```postgres
+**Create Tables**
+```postgres SQL Shell (psql).app
 \c amz-service
+\i <direcory_path>\createTables.sql
 ```
-- run commands createTables.sql
 
+**Quick help**
+`\1` - lists all schemas (databases)
+`\c dbName` - use that dbName schema
+`\dn` -  List of schemas
+`\dt` - tables in the schema
+`\dt dbName` - tables in the dbName schema
+`\dt` - tables in the schema
 
+Structure
+- Databases
+  |- Database
+    |- Schemas
+      |- Schema
+        |- Tables
+          |- Table
 
 ### MongoDB Schema
 
