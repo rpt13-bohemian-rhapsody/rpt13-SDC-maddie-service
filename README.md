@@ -55,24 +55,24 @@ Structure
 Review server/postman_collection.json for more details
 
 ##### Create (POST)
-Create Seller:  `/seller?name=TODO`
-Create Product: `/product?name=TODO&description=TODO&price=TODO&seller=TODO`
+Create Seller:  `/seller?name=TODO`  <br>
+Create Product: `/product?name=TODO&description=TODO&price=TODO&seller=TODO`  <br>
 
 ##### Read (GET)
-Get all sellers:   `/sellers`
-Get one seller:    `/seller/id`
-Get all products:  `/products`
-Get one product:   `/product/id`
+Get all sellers:   `/sellers`  <br>
+Get one seller:    `/seller/id`  <br>
+Get all products:  `/products`  <br>
+Get one product:   `/product/id`  <br>
 
 ##### Update (PUT)
-Update one seller:    `/seller/id?name=TODO`
-Update one product:   `/product/id?name=TODO&description=TODO&price=TODO&seller=TODO`
+Update one seller:    `/seller/id?name=TODO`  <br>
+Update one product:   `/product/id?name=TODO&description=TODO&price=TODO&seller=TODO`  <br>
 
 ##### Delete (DELETE)
-Get all sellers:   `/sellers`
-Get one seller:    `/seller/id`
-Get all products:  `/products`
-Get one product:   `/product/id`
+Get all sellers:   `/sellers`  <br>
+Get one seller:    `/seller/id`  <br>
+Get all products:  `/products`  <br>
+Get one product:   `/product/id`  <br>
 
 ### Seeding Script
 
