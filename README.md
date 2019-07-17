@@ -35,7 +35,6 @@ node database/createDatabase.js
 ```
 
 **Quick help**
-`\1` - lists all schemas (databases)
 `\c dbName` - use that dbName schema
 `\dn` -  List of schemas
 `\dt` - tables in the schema
@@ -51,16 +50,31 @@ Structure
           |- Table <br>
 
 
-### Seeding Script
-
-To seed the database with 100 items matching the datashape of the above schema run: `npm run seedDb`
-
 ### API
 
-Get one item from database: `/product/id`
+Review server/postman_collection.json for more details
 
-### Render Specific Product (Front End)
+##### Create (POST)
+Create Seller:  `/seller?name=TODO`
+Create Product: `/product?name=TODO&description=TODO&price=TODO&seller=TODO`
 
-To render a specific product on the frontend, simply hit this endpoint: `/products/id`
+##### Read (GET)
+Get all sellers:   `/sellers`
+Get one seller:    `/seller/id`
+Get all products:  `/products`
+Get one product:   `/product/id`
 
-It will render this services' App and make a call to `/product/id` automatically to fetch the required data.
+##### Update (PUT)
+Update one seller:    `/seller/id?name=TODO`
+Update one product:   `/product/id?name=TODO&description=TODO&price=TODO&seller=TODO`
+
+##### Delete (DELETE)
+Get all sellers:   `/sellers`
+Get one seller:    `/seller/id`
+Get all products:  `/products`
+Get one product:   `/product/id`
+
+### Seeding Script
+
+To seed the database with 100 items matching the datashape of the above schema run: `TODO`
+
