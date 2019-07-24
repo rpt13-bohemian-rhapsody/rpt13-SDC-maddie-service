@@ -10,6 +10,8 @@ var cn = {
 };
 
 const dbClient = pgp(cn);
+console.log("connection established");
+
 /* **** **** **** **** CREATE **** **** **** **** */
 //Create DATABASE
 //let createSellersSQL = 'CREATE TABLE IF NOT EXISTS sellers(id SERIAL PRIMARY KEY, name VARCHAR NOT NULL);';
@@ -32,6 +34,51 @@ const dbClient = pgp(cn);
 //   })
 // }).catch(e => console.error(e.stack));
 
+//Run any statement
+const runAnyStatement = function (stmt, cb) {
+  dbClient.none(stmt)
+    .then((rows) => {
+      cb(rows, null);
+    })
+    .catch(error => {
+      console.log("error in database : " + error);
+      cb({}, error);
+    });
+}
+
+//Multi-line Insert Sellers
+//const cs = new pgp.helpers.ColumnSet(['col_a', 'col_b'], {table: 'tmp'});
+//const values = [{col_a: 'a1', col_b: 'b1'}, {col_a: 'a2', col_b: 'b2'}];
+//const query = pgp.helpers.insert(values, cs);
+const insertMultiLineSellersCS = new pgp.helpers.ColumnSet(['name'], { table: 'sellers' });
+const insertMultiLineSellers = function (values, cb) {
+  const query = pgp.helpers.insert(values, insertMultiLineSellersCS);
+  dbClient.none(query)
+    .then((rows) => {
+      cb(rows, null);
+    })
+    .catch(error => {
+      console.log("error in database : " + error);
+      cb({}, error);
+    });
+}
+
+//Multi-line Insert Products
+//const cs = new pgp.helpers.ColumnSet(['col_a', 'col_b'], {table: 'tmp'});
+//const values = [{col_a: 'a1', col_b: 'b1'}, {col_a: 'a2', col_b: 'b2'}];
+//const query = pgp.helpers.insert(values, cs);
+const insertMultiLineProductsCS = new pgp.helpers.ColumnSet(['name', 'description', 'product_price', 'seller_id'], { table: 'products' });
+const insertMultiLineProducts = function (values, cb) {
+  const query = pgp.helpers.insert(values, insertMultiLineProductsCS);
+  dbClient.none(query)
+    .then((rows) => {
+      cb(rows, null);
+    })
+    .catch(error => {
+      console.log("error in database : " + error);
+      cb({}, error);
+    });
+}
 
 //Create Seller
 const insertSellerSQL = `INSERT INTO sellers(name) VALUES ($1);`;
@@ -43,6 +90,7 @@ const createSeller = function (values, cb) {
       cb(rows, null);
     })
     .catch(error => {
+      console.log("error in database : " + error);
       cb({}, error);
     });
 }
@@ -239,6 +287,9 @@ const deleteAllProducts = function (cb) {
 
 
 //module.exports.createDatabase = createDatabase;
+module.exports.runAnyStatement = runAnyStatement;
+module.exports.insertMultiLineSellers = insertMultiLineSellers;
+module.exports.insertMultiLineProducts = insertMultiLineProducts;
 module.exports.createSeller = createSeller;
 module.exports.createProduct = createProduct;
 module.exports.readAllSellers = readAllSellers;
