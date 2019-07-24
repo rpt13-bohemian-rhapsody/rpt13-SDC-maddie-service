@@ -16,6 +16,7 @@
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.14.0",
     "jest": "^24.8.0",
+    "newrelic": "^5.10.0",
     "pgtools": "^0.3.0",
     "style-loader": "^0.23.1",
     "webpack": "^4.0.0",
