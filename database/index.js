@@ -12,28 +12,6 @@ var cn = {
 const dbClient = pgp(cn);
 console.log("connection established");
 
-/* **** **** **** **** CREATE **** **** **** **** */
-//Create DATABASE
-//let createSellersSQL = 'CREATE TABLE IF NOT EXISTS sellers(id SERIAL PRIMARY KEY, name VARCHAR NOT NULL);';
-//let createProductsSQL = 'CREATE TABLE IF NOT EXISTS products(id SERIAL PRIMARY KEY, name VARCHAR, description VARCHAR, product_price NUMERIC(10, 2) DEFAULT 0, seller_id INT, FOREIGN KEY(seller_id) REFERENCES sellers(id));';
-// const createDatabase = dbClient.query(createSellersSQL, (err, res) => {
-//   if (err) {
-//     console.log('Error: database/index.js - createSellersSQL - ' + JSON.stringify(err));
-//     throw err;
-//   } else {
-//     console.log('Sellers Table Created');
-//   }
-// }).then(() => {
-//   dbClient.query(createProductsSQL, (err, res) => {
-//     if (err) {
-//       console.log('Error: database/index.js - createProductsSQL - ' + JSON.stringify(err));
-//       throw err;
-//     } else {
-//       console.log('Products Table Created');
-//     }
-//   })
-// }).catch(e => console.error(e.stack));
-
 //Run any statement
 const runAnyStatement = function (stmt, cb) {
   dbClient.none(stmt)
@@ -62,6 +40,25 @@ const insertMultiLineSellers = function (values, cb) {
       cb({}, error);
     });
 }
+
+/* **** **** **** **** CREATE **** **** **** **** */
+let createSellersSQL = 'CREATE TABLE IF NOT EXISTS sellers(id SERIAL PRIMARY KEY, name VARCHAR NOT NULL);';
+let createProductsSQL = 'CREATE TABLE IF NOT EXISTS products(id SERIAL PRIMARY KEY, name VARCHAR, description VARCHAR, product_price NUMERIC(10, 2) DEFAULT 0, seller_id INT, FOREIGN KEY(seller_id) REFERENCES sellers(id));';
+const createTables = function (cb) {
+  dbClient.none(createSellersSQL)
+    .then(() => {
+      dbClient.none(createProductsSQL)
+    })
+    .then(() => {
+      cb({}, null);
+    })
+    .catch(error => {
+      console.log("error in database : " + error);
+      cb({}, error);
+    });
+}
+
+
 
 //Multi-line Insert Products
 //const cs = new pgp.helpers.ColumnSet(['col_a', 'col_b'], {table: 'tmp'});
@@ -263,30 +260,31 @@ const deleteAllProducts = function (cb) {
     });
 }
 
-// //Delete Tables
-// const deleteTableSellersSQL = `DROP TABLE sellers CASCADE;`;
-// const deleteTableSellers = function (values, cb) {
-//   try {
-//     const { rows } = await dbClient.query(deleteTableSellersSQL);
-//     cb(null, rows);
-//   } catch (error) {
-//     cb(error, {});
-//   }
-// }
+//Delete Tables
+const deleteTableSellersSQL = `DROP TABLE IF EXISTS sellers;`;
+const deleteTableSellers = function (cb) {
+  dbClient.result(deleteTableSellersSQL)
+    .then((rows) => {
+      cb(rows, null);
+    })
+    .catch(error => {
+      cb({}, error);
+    });
+}
 
-// const deleteTableProductsSQL = `DROP TABLE products CASCADE;`;
-// const deleteTableProducts = function (values, cb) {
-//   try {
-//     const { rows } = await dbClient.query(deleteTableProductsSQL);
-//     cb(null, rows);
-//   } catch (error) {
-//     cb(error, {});
-//   }
-// }
+const deleteTableProductsSQL = `DROP TABLE IF EXISTS products;`;
+const deleteTableProducts = function (cb) {
+  dbClient.result(deleteTableProductsSQL)
+    .then((rows) => {
+      cb(rows, null);
+    })
+    .catch(error => {
+      cb({}, error);
+    });
+}
 
 
-
-//module.exports.createDatabase = createDatabase;
+module.exports.createTables = createTables;
 module.exports.runAnyStatement = runAnyStatement;
 module.exports.insertMultiLineSellers = insertMultiLineSellers;
 module.exports.insertMultiLineProducts = insertMultiLineProducts;
@@ -303,5 +301,5 @@ module.exports.deleteSpecificSeller = deleteSpecificSeller;
 module.exports.deleteAllSellers = deleteAllSellers;
 module.exports.deleteSpecificProduct = deleteSpecificProduct;
 module.exports.deleteAllProducts = deleteAllProducts;
-// module.exports.deleteTableSellers = deleteTableSellers;
-// module.exports.deleteTableProducts = deleteTableProducts;
+module.exports.deleteTableSellers = deleteTableSellers;
+module.exports.deleteTableProducts = deleteTableProducts;
