@@ -7,10 +7,10 @@ function generateSellers() {
   startTime = new Date();
   let stmts = [];
   for (let id = 1; id <= 10000000; id++) {
-      let sellerData = generateFakeData.Sellers();
-      stmts.push({
-        name: sellerData.name
-        });
+    let sellerData = generateFakeData.Sellers();
+    stmts.push({
+      name: sellerData.name
+    });
   }
   db.insertMultiLineSellers(stmts, (res, err) => {
     if (err) {
@@ -47,18 +47,18 @@ function generateProducts() {
     }
   }
 
-//  db.insertMultiLineProducts(stmts, (res, err) => {
-//     if (err) {
-//       console.log('error ' + err);
-//     }
-//     return '';
-//   }).then(() => {
-//       console.log("insertMultiLineProducts :2 " + helper.timeDiff(startTime, new Date()));
-//   });
+  //  db.insertMultiLineProducts(stmts, (res, err) => {
+  //     if (err) {
+  //       console.log('error ' + err);
+  //     }
+  //     return '';
+  //   }).then(() => {
+  //       console.log("insertMultiLineProducts :2 " + helper.timeDiff(startTime, new Date()));
+  //   });
 }
 
-//generateSellers();
+generateSellers();
 console.log("insertMultiLineSellers :2 " + helper.timeDiff(startTime, new Date()));
-generateProducts();
-console.log("insertMultiLineProducts :2 " + helper.timeDiff(startTime, new Date()));
+//generateProducts();
+//console.log("insertMultiLineProducts :2 " + helper.timeDiff(startTime, new Date()));
 
