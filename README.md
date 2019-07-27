@@ -78,3 +78,8 @@ Get one product:   `/product/id`  <br>
 
 To seed the database with 100 items matching the datashape of the above schema run: `TODO`
 
+#### Seeding single inserts
+```node --max_old_space_size=4096 database/seeds/1_loadData_Insert.js```
+
+
+
