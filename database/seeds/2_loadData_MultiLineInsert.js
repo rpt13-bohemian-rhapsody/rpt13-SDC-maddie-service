@@ -1,26 +1,31 @@
 const generateFakeData = require('./fakerGenerateData');
 const db = require('../../database');
+const env = require('../../env/setup');
+// let priArrayNum = Array.from(Array(env.maxPrimary).keys());
+// let secArrayNum = Array.from(Array(env.maxPrimary * env.maxSecondary).keys());
 let startTime = new Date();
 
 function generateSellers() {
   startTime = new Date();
   let stmts = [];
   let id = 1;
-  for (id = 1; id <= 100000000; id++) {
+  for (id = 1; id <= env.maxPrimary; id++) {
     let sellerData = generateFakeData.Sellers();
     stmts.push({
       name: sellerData.name
     });
 
-    if (id % 100000000 === 0) {
+    if (id % env.maxSecondary === 0) {
+      console.log("insert at " + id);
       db.insertMultiLineSellers(stmts, (res, err) => {
         if (err) {
           console.log('error ' + err);
         } else {
-          console.log("insertMultiLineSellers :2 " + (startTime.getTime() - new Date().getTime()) / 1000 + "at id = " + id);
+          console.log("insertMultiLineSellers :2 " + (startTime.getTime() - new Date().getTime()) / 1000 + " at id = " + id + ', ' + JSON.stringify(res));
           delete stmts;
         }
       });
+      break;
     }
   }
 }
