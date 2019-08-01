@@ -49,6 +49,9 @@ Structure
         |- Tables <br>
           |- Table <br>
 
+**Quick re-create tables**
+```drop table products; drop table sellers;  \i ~/Desktop/HackReactor/hr_workspace/rpt13-SDC-maddie-service/database/createTables.sql;```
+
 
 ### API
 
@@ -80,6 +83,4 @@ To seed the database with 100 items matching the datashape of the above schema r
 
 #### Seeding single inserts
 ```node --max_old_space_size=4096 database/seeds/1_loadData_Insert.js```
-
-
 
