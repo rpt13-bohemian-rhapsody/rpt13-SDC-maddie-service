@@ -8,8 +8,12 @@ pgtools.createdb({
   host: 'localhost'
 }, ENV.dbName, (err, res) => {
   if (err && !~err.message.indexOf('already exists')) {
-    console.log("error : dbSchema.js 1 " + err);
+    console.log("error : dbSchema.js 1 Exists " + err);
     process.exit(-1);
   }
-  console.log(res);
+  if (err) {
+    console.log("error : dbSchema.js 2 " + err);
+  } else {
+    console.log(res);
+  }
 });

@@ -1,3 +1,6 @@
+const initOptions = {
+  pgFormatting: true
+};
 const pgp = require('pg-promise')();
 const ENV = require('../env/setup.js');
 
@@ -283,7 +286,7 @@ const deleteTableProducts = function (cb) {
     });
 }
 
-
+module.exports.dbClient = dbClient;
 module.exports.createTables = createTables;
 module.exports.runAnyStatement = runAnyStatement;
 module.exports.insertMultiLineSellers = insertMultiLineSellers;
