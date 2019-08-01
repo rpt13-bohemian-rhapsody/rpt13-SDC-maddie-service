@@ -1,6 +1,28 @@
-node_modules
+## MAC files ##
+.DS_Store
+
+## NPM ##
+npm
+npm-debug.log
+
+## File extension ##
+*.pid
 *.swp
+*.csv
+*.txt
+*.log
+
+## Grunt intermediate storage ##
+.grunt
+
+## Specific Dirs ##
+node_modules/
 client/dist
+build/
+env/
+database/seeds/datacsv
+
+## Specific Files ##
 package-lock.json
 env/setup.js
-database/seeds/datacsv
+
