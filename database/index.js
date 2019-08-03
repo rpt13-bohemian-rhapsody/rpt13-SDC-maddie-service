@@ -26,7 +26,7 @@ client.execute('CREATE TABLE IF NOT EXISTS amzservice.sellers (id uuid, name tex
 
 
 
-module.exports.cassandraClinet = client;
+module.exports.cassandraClient = client;
 
 
 /*
