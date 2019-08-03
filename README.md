@@ -26,15 +26,15 @@ From the root of the service folder, run `npm start`.
 **Install JDK**
 https://www.oracle.com/technetwork/java/javase/downloads/index.html
 
-**Cassandra directory**
-`mkdir -p ~/opt/packages/cassandra/`
+**Install Cassandra**
+```
+brew update
+brew install cassandra
+```
 
-**Download Cassandra**
-http://cassandra.apache.org/download/
-
-**Path**
-Add Cassandra to your path in .bash_profile or .zshrc
-
-**verify**
+**Verify**
 `cassandra -v`
+
+**Start Cassandra**
+`brew services start cassandra`
 

@@ -1,75 +1,62 @@
-const mongoose = require('mongoose');
-
-mongoose.connect(
-  'mongodb+srv://fec-bruce-service:randompassword@fec-bruce-service-1r15o.mongodb.net/test?retryWrites=true',
-  { useNewUrlParser: true }
-);
-
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', () => console.log('connected to mongoDB'));
-
-let productSchema = mongoose.Schema({
-  id: { type: Number, required: true, unique: true },
-  title: String,
-  description: String,
-  product_price: Number,
-  seller: String,
-  colors: Array,
+const env = require('../env/setup');
+const cassandra = require('cassandra-driver');
+//const authProvider = new cassandra.auth.PlainTextAuthProvider(env.dbUser, env.dbPassword);
+const client = new cassandra.Client({
+  contactPoints: ['127.0.0.1'],
+  localDataCenter: 'datacenter1',
+  authProvider: new cassandra.auth.PlainTextAuthProvider(env.dbUser, env.dbPassword)
 });
 
-let ProductInfo = mongoose.model('ProductInfo', productSchema);
-
-const updateDatabase = (dataArray) => {
-  let failure = false;
-  dataArray.forEach(
-    ({ id, title, description, product_price, seller, colors }) => {
-      let productInfo = new ProductInfo({
-        id,
-        title,
-        description,
-        product_price,
-        seller,
-        colors,
-      });
-      productInfo.save((err, productInfo) => {
-        err
-          ? (() => {
-              console.log(err);
-              failure = true;
-            })()
-          : null;
-      });
-    }
-  );
-  !failure ? console.log('Success!') : null;
-};
-
-const queryDatabase = (id, cb) => {
-  // look up row with id and return the data
-  ProductInfo.find({ id: id }).exec((err, result) =>
-    err ? console.log(err) : cb(result[0])
-  );
-};
-
-const queryAllFromDatabase = (cb) => {
-  var allProducts = [];
-  ProductInfo.find({}, (err, result) => {
-    if (err) {
-      console.log('TCL: queryAllFromDatabase -> err', err);
-    } else {
-      result.forEach(({ title, id }) => {
-        let obj = {
-          title: title,
-          id: id,
-        };
-        allProducts.push(obj);
-      });
-      cb(allProducts, true);
-    }
+client.execute('CREATE TABLE IF NOT EXISTS amzservice.sellers (id uuid, name text, PRIMARY KEY(id));')
+  .then(() => {
+    console.log('sellers created');
+    client.execute(' CREATE TABLE IF NOT EXISTS amzservice.products (id uuid, name text, description text, product_price decimal, seller_id uuid, PRIMARY KEY(id));', (err, result) => {
+      if (err) {
+        console.log("error creating products " + err);
+        process.exit();
+      } else {
+        console.log("products created " + result);
+      }
+    })
+  })
+  .catch((err) => {
+    console.log("error creating sellers " + err);
+    process.exit();
   });
-};
 
-module.exports.updateDatabase = updateDatabase;
-module.exports.queryDatabase = queryDatabase;
-module.exports.queryAllFromDatabase = queryAllFromDatabase;
+
+
+module.exports.cassandraClinet = client;
+
+
+/*
+
+copy to/from CSV files
+
+ cassandra-loader //https://github.com/brianmhess/cassandra-loader
+
+ sstableloader //https://www.datastax.com/dev/blog/using-the-cassandra-bulk-loader-updated
+
+ Cassandra BulkLoader //https://www.datastax.com/dev/blog/using-the-cassandra-bulk-loader-updated
+
+function execute(query, params, callback) {
+  return new Promise((resolve, reject) => {
+    client.execute(query, params, (err, result) => {
+      if(err) {
+        reject()
+      } else {
+        callback(err, result);
+        resolve()
+      }
+    });
+  });
+}
+
+//Execute the queries
+var query = 'SELECT * FROM * WHERE name=? ALLOW FILTERING';
+var q1 = execute(query, ['oranges'], (err, result) => {});
+Promise.all([q1]).then(() => {
+  console.log('exit');
+  process.exit();
+});
+*/
