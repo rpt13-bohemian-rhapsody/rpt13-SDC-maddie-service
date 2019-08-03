@@ -1,39 +1,63 @@
+const fs = require('fs');
+const path = require('path');
+const transform = require('stream-transform');
+const async = require('async');
+const csv = require('csv-parser');
 const env = require('../env/setup');
+let sellersFilePath = path.join(__dirname, '..', '/database/seeds/datacsv/seller_create.cql');
+let productsFilePath = path.join(__dirname, '..', '/database/seeds/datacsv/product_create.csv');
+
+//Cassandra
 const cassandra = require('cassandra-driver');
-//const authProvider = new cassandra.auth.PlainTextAuthProvider(env.dbUser, env.dbPassword);
+const loadBalancingPolicy = new cassandra.policies.loadBalancing.RoundRobinPolicy();
 const client = new cassandra.Client({
   contactPoints: ['127.0.0.1'],
   localDataCenter: 'datacenter1',
-  authProvider: new cassandra.auth.PlainTextAuthProvider(env.dbUser, env.dbPassword)
+  authProvider: new cassandra.auth.PlainTextAuthProvider(env.dbUser, env.dbPassword),
+  policies: { loadBalancing: loadBalancingPolicy }
 });
 
-client.execute('CREATE TABLE IF NOT EXISTS amzservice.sellers (id uuid, name text, PRIMARY KEY(id));')
+
+
+let insertSQL = "INSERT INTO amzservice.sellers (id, name) VALUES (uuid(), ?)";
+
+client.connect()
+  .then(() => {
+    return client.execute("CREATE KEYSPACE IF NOT EXISTS amzservice WITH replication = {'class': 'SimpleStrategy', 'replication_factor': '1' }");
+  })
+  .then(() => {
+    console.log('created keyspace');
+    return client.execute('CREATE TABLE IF NOT EXISTS amzservice.sellers (id uuid, name text, PRIMARY KEY(id));');
+  })
   .then(() => {
     console.log('sellers created');
-    client.execute(' CREATE TABLE IF NOT EXISTS amzservice.products (id uuid, name text, description text, product_price decimal, seller_id uuid, PRIMARY KEY(id));', (err, result) => {
+    return client.execute(' CREATE TABLE IF NOT EXISTS amzservice.products (id uuid, name text, description text, product_price decimal, seller_id uuid, PRIMARY KEY(id));');
+  })
+  .then(() => {
+    console.log("created products");
+    return fs.readFile(sellersFilePath, (err, data) => {
       if (err) {
-        console.log("error creating products " + err);
-        process.exit();
+        console.log("error reading file " + err);
+        throw err;
       } else {
-        console.log("products created " + result);
+        return client.execute(data);
       }
     })
   })
   .catch((err) => {
-    console.log("error creating sellers " + err);
+    console.log("error creating tables " + err);
     process.exit();
   });
 
+const executeQuery = (strQuery, data, hints) => {
+  return client.execute(strQuery, data, hints);
+}
 
 
-module.exports.cassandraClient = client;
+module.exports.executeQuery = executeQuery;
 
 
 /*
-
-copy to/from CSV files
-
- cassandra-loader //https://github.com/brianmhess/cassandra-loader
 
  sstableloader //https://www.datastax.com/dev/blog/using-the-cassandra-bulk-loader-updated
 
