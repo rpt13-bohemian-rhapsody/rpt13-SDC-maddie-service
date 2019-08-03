@@ -8,29 +8,33 @@ From within the root directory: `npm install`
 
 From the root of the service folder, run `npm start`.
 
-### MongoDB Schema
+### CASSANDRA DATABASE
 
-```
-let productInfoSchema = mongoose.Schema({
-  id: { type: Number, required: true, unique: true },
-  title: String,
-  description: String,
-  product_price: Number,
-  seller: String,
-  colors: Array,
-});
-```
+-- Developed at Facebook for "Inbox search"
+-- Handle tremendous writes, geo replication - to reduce search latencies
+-- Founded on Google Big Table (data model), Amazon Dynamo (distributed nature)
+-- used by Apple also
+-- Has nodes, cluster, masterless peer-to-peer system
+-- Each node - running instance of Cassandra - all functionality exists
 
-### Seeding Script
+-- Data has token values
+-- Virtual Nodes
+-- Snitches
 
-To seed the database with 100 items matching the datashape of the above schema run: `npm run seedDb`
+#### Install Cassandra
 
-### API
+**Install JDK**
+https://www.oracle.com/technetwork/java/javase/downloads/index.html
 
-Get one item from database: `/product/id`
+**Cassandra directory**
+`mkdir -p ~/opt/packages/cassandra/`
 
-### Render Specific Product (Front End)
+**Download Cassandra**
+http://cassandra.apache.org/download/
 
-To render a specific product on the frontend, simply hit this endpoint: `/products/id`
+**Path**
+Add Cassandra to your path in .bash_profile or .zshrc
 
-It will render this services' App and make a call to `/product/id` automatically to fetch the required data.
+**verify**
+`cassandra -v`
+
