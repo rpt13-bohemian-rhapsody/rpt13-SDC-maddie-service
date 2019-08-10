@@ -4,7 +4,7 @@ const transform = require('stream-transform');
 const async = require('async');
 const csv = require('csv-parser');
 const env = require('../env/setup');
-let sellersFilePath = path.join(__dirname, '..', '/database/seeds/datacsv/seller_create.cql');
+let sellersFilePath = path.join(__dirname, '..', '/database/seeds/datacsv/seller_create.csv');
 let productsFilePath = path.join(__dirname, '..', '/database/seeds/datacsv/product_create.csv');
 
 //Cassandra
@@ -35,14 +35,17 @@ client.connect()
   })
   .then(() => {
     console.log("created products");
-    return fs.readFile(sellersFilePath, (err, data) => {
-      if (err) {
-        console.log("error reading file " + err);
-        throw err;
-      } else {
-        return client.execute(data);
-      }
-    })
+    //INSERT Statement
+    // return fs.readFile(sellersFilePath, (err, data) => {
+    //   if (err) {
+    //     console.log("error reading file " + err);
+    //     throw err;
+    //   } else {
+    //     console.log(data.toString().substring(1, 100));
+    //     return client.execute(data.toString());
+    //   }
+    // })
+    return client.execute("COPY amzservice.sellers (id, name) FROM '" + sellersFilePath + "' WITH DELIMITER=',' AND WITH HEADER = FALSE;")
   })
   .catch((err) => {
     console.log("error creating tables " + err);
