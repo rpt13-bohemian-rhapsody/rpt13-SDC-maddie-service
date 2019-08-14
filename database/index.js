@@ -33,24 +33,25 @@ client.connect()
     console.log('sellers created');
     return client.execute(' CREATE TABLE IF NOT EXISTS amzservice.products (id uuid, name text, description text, product_price decimal, seller_id uuid, PRIMARY KEY(id));');
   })
-  .then(() => {
-    console.log("created products");
-    //INSERT Statement
-    // return fs.readFile(sellersFilePath, (err, data) => {
-    //   if (err) {
-    //     console.log("error reading file " + err);
-    //     throw err;
-    //   } else {
-    //     console.log(data.toString().substring(1, 100));
-    //     return client.execute(data.toString());
-    //   }
-    // })
-    return client.execute("COPY amzservice.sellers (id, name) FROM '" + sellersFilePath + "' WITH DELIMITER=',' AND WITH HEADER = FALSE;")
-  })
   .catch((err) => {
     console.log("error creating tables " + err);
     process.exit();
   });
+
+// .then(() => {
+//   console.log("created products");
+//   //INSERT Statement
+//   // return fs.readFile(sellersFilePath, (err, data) => {
+//   //   if (err) {
+//   //     console.log("error reading file " + err);
+//   //     throw err;
+//   //   } else {
+//   //     console.log(data.toString().substring(1, 100));
+//   //     return client.execute(data.toString());
+//   //   }
+//   // })
+//   return client.execute("COPY amzservice.sellers (id, name) FROM '" + sellersFilePath + "' WITH DELIMITER=',' AND WITH HEADER = FALSE;")
+// })
 
 const executeQuery = (strQuery, data, hints) => {
   return client.execute(strQuery, data, hints);

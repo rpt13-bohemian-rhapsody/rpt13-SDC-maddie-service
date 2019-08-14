@@ -1,40 +1,47 @@
+//Write data to CSV or text
+//node --max-old-space-size=8192  writeDataToCSV.js
+
 const generateFakeData = require('./fakerGenerateData');
 const env = require('../../env/setup');
 const fs = require('fs');
 const path = require('path');
 const Uuid = require('cassandra-driver').types.Uuid;
 let startTime = new Date().getTime();
-let fileExtCQL = ".cql"; //TODO
-let fileExtCSV = ".csv"; //TODO
+let fileExt = ".csv";
 
-let sellersFilePath = path.join(__dirname, '..', '/seeds/datacsv/seller_create');
-let productsFilePath = path.join(__dirname, '..', '/seeds/datacsv/product_create');
+let sellersFilePath = path.join(__dirname, '..', '/seeds/datacsv/cassandra_seller_create');
+let productsFilePath = path.join(__dirname, '..', '/seeds/datacsv/cassandra_product_create');
 
 function generateSellersFileCSV() {
   //Check if file exists
   try {
-    if (fs.existsSync(sellersFilePath + fileExtCSV)) {
+    console.log("file path = " + sellersFilePath);
+    if (fs.existsSync(sellersFilePath + fileExt)) {
       //file exists - do not need to re-create
       console.log('Completed generateSellersFile : ' + 'File exists');
       return;
     }
 
     //generate file
-    var stream = fs.createWriteStream(sellersFilePath + fileExtCSV);
+    var stream = fs.createWriteStream(sellersFilePath + fileExt);
 
     let sellerStr = "";
     stream.once('open', (fd) => {
-      for (let id = 1; id <= env.maxPrimary * env.maxSecondary; id++) {
-        let sellerData = generateFakeData.Sellers();
-        let id = Uuid.random();
+      for (var j = 0; j < env.maxSecondary; j++) {
 
-        sellerStr += id + ',' + sellerData.name + "\n";
+        for (let id = 1; id <= env.maxPrimary * env.maxSecondary; id++) {
+          let sellerData = generateFakeData.Sellers();
+          let id = Uuid.random();
+
+          sellerStr += id + ',' + sellerData.name + "\n";
+        }
+        stream.write(sellerStr);
       }
-      stream.write(sellerStr);
       stream.end();
       console.log('Completed generateSellersFile : ' + 'File generated with ' + (env.maxPrimary * env.maxSecondary).toLocaleString() +
         ' # of lines. Time in seconds =  ' +
         (new Date().getTime() - startTime) / 1000);
+
       sellerStr = '';
     });
 
@@ -47,14 +54,18 @@ function generateSellersFileCSV() {
 function generateSellersFileCQL() {
   //Check if file exists
   try {
-    if (fs.existsSync(sellersFilePath + fileExtCQL)) {
+    fileExt = ".cql";
+
+    console.log("file path = " + sellersFilePath);
+
+    if (fs.existsSync(sellersFilePath + fileExt)) {
       //file exists - do not need to re-create
       console.log('Completed generateSellersFile : ' + 'File exists');
       return;
     }
 
     //generate file
-    var stream = fs.createWriteStream(sellersFilePath + fileExtCQL);
+    var stream = fs.createWriteStream(sellersFilePath + fileExt);
 
     let sellerStr = "";
     stream.once('open', (fd) => {
@@ -77,6 +88,9 @@ function generateSellersFileCQL() {
     console.log('ERROR generateSellersFile' + JSON.stringify(err));
   }
 }
+
+generateSellersFileCSV();
+//generateSellersFileCQL();
 
 function generateProductsFile() {
   //Check if file exists
@@ -117,8 +131,5 @@ function generateProductsFile() {
     console.log('ERROR generateProductsFile' + JSON.stringify(err));
   }
 }
-
-generateSellersFileCQL();
-generateSellersFileCSV();
 
 //generateProductsFile();

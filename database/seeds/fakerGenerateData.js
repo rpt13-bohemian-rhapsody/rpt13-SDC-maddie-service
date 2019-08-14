@@ -1,3 +1,4 @@
+// using faker to get the data
 const faker = require("faker");
 const env = require('../../env/setup');
 //faker.setLocale("en_US");
