@@ -20,7 +20,7 @@ node_modules/
 client/dist
 build/
 env/
-database/seeds/datacsv
+seeds/data
 
 ## Specific Files ##
 package-lock.json
