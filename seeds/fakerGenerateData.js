@@ -19,12 +19,14 @@ var Products = function () {
   var description = faker.commerce.productAdjective();
   var product_price = faker.commerce.price();
   var seller_id = faker.random.number(env.maxPrimary);
+  var color = faker.commerce.color();
 
   return {
     name: name,
     description: description,
     product_price: product_price,
-    seller_id: seller_id
+    seller_id: seller_id,
+    color: color
   };
 };
 
